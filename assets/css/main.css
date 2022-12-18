@@ -2706,15 +2706,15 @@ input, select, textarea {
 					}
 
 			.tiles article.style1 > .image:before {
-				background-color: #f2849e;
+				/* background-color: #e9bbc6; */
 			}
 
 			.tiles article.style2 > .image:before {
-				background-color: #7ecaf6;
+				/* background-color: #b4d6ea; */
 			}
 
 			.tiles article.style3 > .image:before {
-				background-color: #7bd0c1;
+				/* background-color: #aedcd4; */
 			}
 
 			.tiles article.style4 > .image:before {
