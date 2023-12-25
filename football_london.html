@@ -46,7 +46,7 @@
 
 
 //Adds circleMarker for each team
-//color is manually chosen to represnt the league the team plays in as of 21/22
+//color is manually chosen to represnt the league the team plays in
 
 	L.circleMarker([51.55494851690169, -0.1084058154884312], 100, {})
 	.addTo(mymap).bindTooltip("<b>Arsenal</b></br>Emirates Stadium</br>Founded: 1886</br></br><img src='football_images/Arsenal_FC.svg' width='75px'height=auto/>")
@@ -110,7 +110,7 @@ var legend = L.control({ position: "bottomleft"});
 
 legend.onAdd = function(mymap) {
   var div = L.DomUtil.create("div", "info legend");
-  div.innerHTML += "<b>League Status for 22-23 Season</b></br>";
+  div.innerHTML += "<b>League Status for 23-24 Season</b></br>";
   div.innerHTML += '<i style="background: purple"></i><span>Premier League</span><br>';
   div.innerHTML += '<i style="background: gold"></i><span>EFL Championship</span><br>';
   div.innerHTML += '<i style="background: silver"></i><span>EFL League One</span><br>';
