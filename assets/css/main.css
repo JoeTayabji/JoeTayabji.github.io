@@ -2705,28 +2705,18 @@ input, select, textarea {
 						margin-bottom: 0;
 					}
 
-			.tiles article.style1 > .image:before {
-				/* background-color: #e9bbc6; */
+			article.item h2 {
+				color: black;
+				text-shadow: 
+					-1px -1px 0 white,
+					1px -1px 0 white,
+					-1px  1px 0 white,
+					1px  1px 0 white;
 			}
+			
 
 			.tiles article.style2 > .image:before {
-				/* background-color: #b4d6ea; */
-			}
-
-			.tiles article.style3 > .image:before {
-				/* background-color: #aedcd4; */
-			}
-
-			.tiles article.style4 > .image:before {
-				/* background-color: #c75b9b; */
-			}
-
-			.tiles article.style5 > .image:before {
-				background-color: #ae85ca;
-			}
-
-			.tiles article.style6 > .image:before {
-				background-color: #8499e7;
+				background-color: #b4d6ea; 
 			}
 
 			body:not(.is-touch) .tiles article:hover > .image {
@@ -2836,7 +2826,7 @@ input, select, textarea {
 			display: block;
 			border-bottom: 0;
 			color: inherit;
-			font-weight: 900;
+			font-weight: 1000;
 			letter-spacing: 0.35em;
 			margin: 0 0 2.5em 0;
 			text-decoration: none;
@@ -2855,8 +2845,8 @@ input, select, textarea {
 
 				#header .logo .symbol img {
 					display: block;
-					width: 2em;
-					height: 2em;
+					width: 110px;
+					height: 110px;
 				}
 
 		#header nav {

@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>Leaflet Map - Football Clubs of London</title>
+		<title>Directional Slope</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
@@ -53,9 +53,12 @@
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
-							<h1>First Leaflet Map</h1>
-							<iframe src="football_london.html" width="100%" height="600"></iframe>
-							<p>This web map was created as a tool to learn Leaflet. This map shows teams that play in the city of London. Color coding is used in the symbology to indicate the level of the team. Additionally, popups are used on hover actions.</p>
+							<h1>Directional Slope: A Python Tool For Path Design</h1>
+							<span class="image main"><img src="images/dirslope.jpg" alt="" height = 400px style="max-width: 400px;"/></span>
+                            <p>This script is designed to calculate the directional slope of a line. It takes two inputs: a line and a DEM raster, both of which must be projected. The output is a new line with a directional slope attribute field. The user can specify a sampling distance. The input line will be split at this distance into new segments. The directional slope is calculated at the midpoint of the new segment. This script uses Horn's method for calculating slope at any location (Horn, 1981). It then uses a basic trigonometric calculation to adjust for directionality (Neteler and Mitášová, 2008). </p>
+                            <p>This project, a collaboration with <a href="https://www.linkedin.com/in/dara-seidl">Dr. Dara Seidl</a>, is now being developed into separate QGIS and ArcGIS plugins.</p>
+							<p><a href="dir_slope_foss_horn.py" target="_blank">The full standalone script can be found here.</a></p>
+							<iframe width="100%" height="600" frameborder="0" scrolling="no" allowfullscreen src="directional_slope.pdf"></iframe>
 						</div>
 					</div>
 
