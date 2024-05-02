@@ -131,7 +131,7 @@
                         let longitude = feature.geometry.coordinates[0];
 
                         // add a marker for each fire hotspot
-                        L.marker([latitude, longitude]).addTo(myMap);
+                        L.marker([latitude, longitude]).addTo(fireLayer);
                     });
                 })
                 .on('error', function(error) {
