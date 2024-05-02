@@ -1,0 +1,46 @@
+/*
+    Joe Tayabji
+    GEOG 6165
+    Spring 2024
+    Copyright 2024, All Rights Reserved
+*/
+
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; 
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.legend {  
+    text-align: left; 
+    line-height: 18px; 
+    color: #000; 
+} 
+
+.legend i { 
+    border-radius: 50%; 
+    width: 18px; 
+    height: 18px; 
+    display: inline-block;
+    margin-right: 8px; 
+    opacity: 1; 
+    border: 0.5px solid black;
+}
+
+
+
+#marker {
+    border: none;
+}
+
+.legend img {
+    height: 18px; 
+    width: 18px;
+}

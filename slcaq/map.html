@@ -1,0 +1,210 @@
+<!--
+    Joe Tayabji
+    GEOG 6165
+    Spring 2024
+    Copyright 2024, All Rights Reserved
+-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/x-icon" href="assets/map.ico" />
+    <title>Salt Lake City Air Quality</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- loading Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+    <!-- loading fontawesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
+    <!-- loading Leaflet EasyButton -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+	<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+    <!-- loading Leaflet Omnivore to read csv file -->
+	<script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <div id="map"></div>
+    <script>
+        // create map, set center of view, and zoom level
+        var myMap = L.map('map').setView([40.75962, -111.886798], 9);
+
+        // create basemap layers
+        var CartoDB_Positron = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(myMap);
+        var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
+        });
+
+        // layer variables
+        var fireLayer = L.layerGroup();
+        var aqiLayer = L.layerGroup();
+
+        // variables related to PurpleAir
+        const my_api_read_key = 'DFD6B274-0289-11EF-B9F7-42010A80000D';
+        const fields = 'latitude,longitude,pm2.5';
+        // filter so only sensors updated within the past hour are included
+        const age = 60*60;
+        // only include sensors that are outside (and not inside)
+        const type = 0; 
+
+        // create bounding box for the area of interest
+        const nwLat = 41.54799259027208;
+        const nwLon = -114.45505046110092;
+        const seLat = 40.13541660332668;
+        const seLon = -111.32456419000917;
+
+        // NASA FIRMS map key (api key) for fire hotspots
+        const my_map_key = '41f2243faaa2080ee0efd0ec30401dd1';
+
+        // sets color for the PurpleAir sensor circleMarkers
+        function getSensorColor(aqi) {
+            return aqi <= 50 ? '#1a9850' :
+                aqi <= 100 ? '#91cf60' :
+                aqi <= 150 ? '#d9ef8b' :
+                aqi <= 200 ? '#fee08b' :
+                aqi <= 300 ? '#fc8d59' :
+                aqi >= 300 ? '#d73027' :
+                '#969696';
+        };
+
+        // get and add PurpleAir sensor data
+        function getSensorData() {
+            let my_url = `https://api.purpleair.com/v1/sensors?nwlat=${nwLat}&nwlng=${nwLon}&selat=${seLat}&selng=${seLon}&location_type=${type}&max_age=${age}&fields=${fields}`;
+
+            // use the fetch API to send request and return response
+            fetch (my_url, {
+                headers: {
+                    'X-API-KEY': my_api_read_key
+                }
+            })
+            .then(response => response.json())
+            .then(data => {                
+                // sort data by AQI in descending order
+                data.data.sort((a, b) => a[3] - b[3]);
+                
+                data.data.forEach(sensor => {
+                    let lat = sensor[1];
+                    let lon = sensor[2];
+                    let aqi = sensor[3];
+                    L.circleMarker([lat, lon],
+                        {color: 'black', 
+                        weight: 0.5, 
+                        fillColor: getSensorColor(aqi), 
+                        fillOpacity: 0.8, 
+                        radius: 5})
+                    .addTo(aqiLayer);
+                    aqiLayer.addTo(myMap);
+                });                
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        getSensorData();
+
+        // get and add NASA FIRMS fire hotspot data
+        // the FIRMS API does not work well and is easy to overload with requests
+        // ultimately, a better source of data should be used
+        function getFireData() {
+            let my_url = `https://firms.modaps.eosdis.nasa.gov/api/country/csv/${my_map_key}/VIIRS_SNPP_NRT/USA/1/2024-05-01`;
+            
+            // use omnivore to read fire hotspot data, which is a csv
+            omnivore.csv(my_url)
+                .on('ready', function(e) {
+                    // access the GeoJSON layer
+                    var geoJSONLayer = e.target.toGeoJSON();
+
+                    // iterate over features
+                    geoJSONLayer.features.forEach(function(feature) {
+                        // access latitude and longitude of each feature
+                        let latitude = feature.geometry.coordinates[1];
+                        let longitude = feature.geometry.coordinates[0];
+
+                        // add a marker for each fire hotspot
+                        L.marker([latitude, longitude]).addTo(myMap);
+                    });
+                })
+                .on('error', function(error) {
+                    console.error('Error fetching fire data:', error);
+                });
+        }
+
+        // commented out to avoid issues with FIRMS API
+        // getFireData()
+
+        // what to show when legend isn't active
+        function hideLegend() {
+            var div = document.getElementById("info legend");
+            div.innerHTML = "<b>Show Legend</b>";
+        }
+
+        // create and add legend
+        var legend = L.control({ position: "bottomleft", orientation: 'horizontal'});
+        function showLegend(){
+            var div = document.getElementById("info legend");
+            div.innerHTML = ""; // clear the legend
+            div.innerHTML += "<b>Air Quality: PurpleAir US EPA PM2.5</b></br>";
+            div.innerHTML += '<i style="background: #1a9850"></i><span>0 - 50: Satisfactory</span><br>';
+            div.innerHTML += '<i style="background: #91cf60"></i><span>51 - 100: Acceptable</span><br>';
+            div.innerHTML += '<i style="background: #d9ef8b"></i><span>101 - 150: Affects Sensitive Groups</span><br>';
+            div.innerHTML += '<i style="background: #fee08b"></i><span>151 - 200: Affects General Public</span><br>';
+            div.innerHTML += '<i style="background: #fc8d59"></i><span>201 - 300: Health Alert</span><br>';
+            div.innerHTML += '<i style="background: #d73027"></i><span>300+: Emergency Conditions</span><br>';
+            div.innerHTML += '<i style="background: #969696"></i><span>No Data</span><br>';
+            div.innerHTML += "<b>Fire Data: NASA VIIRS</b></br>";
+            div.innerHTML += '<i id="marker"><img src="assets/marker.svg"></img></i><span>Possible Hotspot</span><br>';
+        };
+        legend.onAdd = function(map) {
+            var div = L.DomUtil.create("div", "info legend");
+            div.innerHTML = "<b>Show Legend</b>";
+            div.addEventListener("mouseenter", showLegend);
+            div.addEventListener("mouseleave", hideLegend);
+            div.id = "info legend";
+            return div;
+        }
+        legend.addTo(myMap);
+
+        // add Current Location button
+        L.easyButton('fa-solid fa-location-crosshairs', function(btn, map){
+            map.locate({setView: true, maxZoom: 13});
+        },'Go to current location').addTo(myMap);
+        // add circle and error radius for current location
+        // found at https://leafletjs.com/examples/mobile/
+        var currLocation;
+        var currLocationError;
+        function onLocationFound(e) {
+            var error = e.accuracy;
+            currLocationError = L.circle(e.latlng, error, {color: '#1DA1F2', weight: 0, fillOpacity: 0.3}).addTo(myMap);
+            currLocation = L.circleMarker(e.latlng, {radius: 8, weight: 2, fillColor: '#1DA1F2', fillOpacity: 1, color: 'white'}).addTo(myMap);
+            // Set timeout to remove marker after 10 seconds
+        setTimeout(function() {
+            myMap.removeLayer(currLocation);
+            myMap.removeLayer(currLocationError);
+        }, 10000);
+        }
+
+        myMap.on('locationfound', onLocationFound);
+        
+        // set up layer selector
+        var baseLayers = {
+            "Basic": CartoDB_Positron,
+            "Topo": Esri_WorldTopoMap
+        };
+        var overlays = {
+            "Fire Data": fireLayer,
+            "Air Quality": aqiLayer
+        };
+        const layerControl = L.control.layers(baseLayers, overlays, {collapsed: true}).addTo(myMap);
+    </script>
+</body>
+</html>
