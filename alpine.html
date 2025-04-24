@@ -1,0 +1,249 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Alpine Land Classification Using Machine Learning</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="shortcut icon" href="images/mapicon.ico">
+        <style>
+            .figure-container {
+                text-align: center;
+                margin: 20px 0;
+            }
+            .figure-caption {
+                text-align: center;
+                font-style: italic;
+                margin-top: 5px;
+                margin-bottom: 20px;
+            }
+            table {
+                margin: 20px auto;
+                width: 80%;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
+        </style>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="https://joetayabji.github.io/" class="logo">
+									<span class="symbol"><img src="images/headshot.jpg" alt="" /></span><span class="title">Home</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="https://joetayabji.github.io/">Home</a></li>
+							<li><a href="capstone.html">GEOG 6161: Capstone in GIS</a></li>
+							<li><a href="alpine.html">GEOG 6160: Alpine ML Land Classification</a></li>
+							<li><a href="redbackedshrike.html">GEOG 6000: Kriging Bird Migration Prediction</a></li>
+							<li><a href="dirslope.html">GEOG 6180: Directional Slope</a></li>
+							<li><a href="bigdata.html">GEOG 6150: MTB Trail Database</a></li>
+							<li><a href="fieldmethods.html">GEOG 5170: Field Methods</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>GEOG 6160 Spatial Modeling and Geocomputation: Using Machine Learning for Alpine Land Classification in Mountainous Terrain</h1>
+                            
+                            <h2>Background & Introduction</h2>
+                            <p>Alpine terrain is a crucial research area for scientists across multiple disciplines, including botanists at the Betty Ford Alpine Gardens in Vail, Colorado. While mountains are intuitively recognizable to humans, providing definitive scientific classifications of alpine terrain remains challenging. A rough definition of alpine areas can be described as mountain regions where a combination of temperature, growing season, elevation, and latitude create conditions unsuitable for tree growth (Paulsen & Körner, 2014).</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/columbine_todd_pierce.jpg" alt="Figure 1: Columbine (Aquilegia)" style="max-width: 800px;" />
+                                <p class="figure-caption">Figure 1: Columbine (Aquilegia). Source: Todd Pierce, Betty Ford Alpine Gardens</p>
+                            </div>
+                            
+                            <p>The Betty Ford Alpine Gardens, dedicated to conservation and education about alpine flora, employs botanists and biologists who conduct field research searching for different alpine plant species. Their work is challenging due to short alpine summers (when snow has melted) and vast alpine areas to explore. This project aims to apply modern machine learning methods to help identify alpine regions more precisely, supporting researchers in focusing their field efforts more effectively.</p>
+                            
+                            <p>The Global Mountain Biodiversity Assessment (GMBA) has adopted the concept of "ruggedness" to define mountains, focusing on local elevation changes rather than absolute elevation. Additionally, Testolin et al. (2020) developed a comprehensive global map of alpine areas using 19 climatic variables, though some regions like the Tarryall Mountains in Colorado remain unclassified in their approach.</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/tarryall_mountains.jpg" alt="Figure 2: The location of the Tarryall Mountains" style="max-width: 600px;" />
+                                <p class="figure-caption">Figure 2: The location of the Tarryall Mountains is denoted by the red box. Source: OpenStreetMap</p>
+                            </div>
+                            
+                            <p>Machine learning has proven effective for land use land cover (LULC) classification, particularly when combining methods like random forest, support vector machine, and artificial neural networks with Landsat imagery (Talukdar et al., 2020). This study explores whether these techniques can be applied successfully to the specific challenge of alpine terrain classification.</p>
+                            
+                            <h2>Methodology</h2>
+                            <p>This study builds upon work by Emily Griffoul (Conservation Scientist at Betty Ford Alpine Gardens) and Dara Seidl (Associate Professor of GIS at Colorado Mountain College). While Griffoul attempted to combine in situ observations with the GMBA mountain inventory using ESRI ArcGIS Pro, the results were not sufficiently accurate and were time-intensive. Seidl achieved better results using remote sensing, digital elevation models (DEMs), and Google Earth Engine (GEE), but encountered limitations in GEE's methodological options.</p>
+                            
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Band</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Visible Coastal Aerosol (0.43 - 0.45 μm)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Visible Blue (0.450 - 0.51 μm)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>Visible Green (0.53 - 0.59 μm)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>Red (0.64 - 0.67 μm)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>5</td>
+                                            <td>Near-Infrared (0.85 - 0.88 μm)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>6</td>
+                                            <td>SWIR 1(1.57 - 1.65 μm)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>7</td>
+                                            <td>SWIR 2 (2.11 - 2.29 μm)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p class="figure-caption">Figure 3: Landsat 9 OLI-2 Bands. Source: USGS</p>
+                            </div>
+                            
+                            <p>This study employed similar techniques to Seidl's but utilized random forests and neural networks in R. Landsat 9 OLI-2 imagery was collected for summer months (mid-July to mid-September, 2018 to 2024) to minimize snow effects on reflectance. Cloud coverage was limited to 4% in the data sourced from the USGS, which also provided the DEMs.</p>
+                            
+                            <p>Three diverse study areas were selected:</p>
+                            <ol>
+                                <li>Parts of the Canadian Rockies, Calgary, Alberta, and southern plains</li>
+                                <li>Denver, Colorado area, surrounding cities, and mountain ranges in the Colorado Rockies</li>
+                                <li>White Mountains in New Hampshire and southwestern Maine</li>
+                            </ol>
+                            
+                            <div class="figure-container">
+                                <img src="images/qgis_polygons.jpg" alt="Figure 4: QGIS screenshot showing training data sample polygons" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 4: A QGIS screenshot showing a small subset of the polygons used for training data samples. Here, magenta polygons occur in alpine environments, while the cyan ones do not.</p>
+                            </div>
+                            
+                            <p>Using QGIS, polygons were manually created in each area to represent alpine and non-alpine land cover, resulting in six total shapefiles. These were referenced against Google Maps Satellite imagery. From these polygons, 999 random samples were taken from each shapefile (5,994 points total). Three different raster stacks were created, one for each study area, with eight bands: seven from Landsat 9 OLI-2 and one DEM. All data was scaled to a range of 0-1 based on minimum and maximum values, and N/A values were removed, leaving 5,889 points.</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/rf_with_ele.jpeg" alt="Figure 5: Variable importance plot" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 5: Variable importance plot when all three areas are used, and elevation is included.</p>
+                            </div>
+                            
+                            <p>Four machine learning models were created using the combined data from all three areas:</p>
+                            <ol>
+                                <li>Random forest using only the seven Landsat 9 OLI-2 bands</li>
+                                <li>Random forest including elevation</li>
+                                <li>Neural network using only the seven Landsat 9 OLI-2 bands</li>
+                                <li>Neural network including elevation and latitude</li>
+                            </ol>
+                            
+                            <p>The neural network models used the following parameters: size = 25, decay = 1e-5, maxit = 500. All models were resampled with an 80%/20% holdout strategy, and attempts were made to tune hyperparameters, though none improved the AUC scores.</p>
+                            
+                            <h2>Results</h2>
+                            <p>The random forest model using only Landsat 9 OLI-2 bands achieved an AUC score of 0.97. When elevation was added, the AUC improved to 0.998, with elevation showing considerable variable importance (Figure 5).</p>
+                            
+                            <p>The neural network models yielded similar results. Using only remote sensing imagery resulted in an AUC of 0.979, while adding latitude and elevation increased the AUC to 0.999.</p>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="figure-container">
+                                        <img src="images/white_mountains_results.png" alt="Figure 6: NN Predictions for the White Mountains" style="max-width: 700px;" />
+                                        <p class="figure-caption">Figure 6: NN Predictions for the White Mountains. Top: Without elevation. Middle: Satellite imagery (source: Google). Bottom: With elevation and latitude</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="figure-container">
+                                        <img src="images/leadville_results.png" alt="Figure 7: NN Predictions near Leadville, CO" style="max-width: 700px;" />
+                                        <p class="figure-caption">Figure 7: NN Predictions near Leadville, CO. Top: Without elevation. Middle: Satellite imagery (source: Google). Bottom: With elevation and latitude</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="figure-container">
+                                        <img src="images/utah_results.png" alt="Figure 8: NN Predictions in Utah" style="max-width: 700px;" />
+                                        <p class="figure-caption">Figure 8: NN Predictions in Utah. Top: Without elevation. Middle: Satellite imagery (source: Google). Bottom: With elevation and latitude</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <p>When applied to prediction scenarios, the neural network model using only Landsat 9 OLI-2 bands showed errors of commission. While it captured treeline details effectively, it incorrectly classified pixels below treeline and water bodies as alpine. The model incorporating elevation and latitude created clearer boundaries between alpine and non-alpine regions but had mixed results: it overstated alpine regions in Colorado while understating them in Utah. Neither model correctly classified the Tarryall Mountains as alpine.</p>
+                            
+                            <h2>Discussion & Conclusion</h2>
+                            <p>Despite high AUC scores, the models fell short of producing satisfactory generalized predictions, particularly in Utah (Figure 8). Overfitting appears to be the primary issue, as evidenced by excellent scores but poor performance in new landscapes. This suggests two potential approaches for improvement: using less training data or collecting more diverse training samples from additional landscapes.</p>
+                            
+                            <p>The proper treatment of elevation and latitude remains a challenge, as they are strongly associated and can lead to spatial autocorrelation. However, both variables are clearly important in defining alpine regions. Additionally, this work demonstrated the need for significant computational resources when processing and analyzing this type of data, especially when working with neural networks.</p>
+                            
+                            <p>This study confirms that machine learning offers powerful tools for land use land cover classification, particularly for alpine environments. While the results did not meet all objectives, they established a promising foundation for future work. Combining spectral data with bioclimatic variables, elevation, and latitude could yield more comprehensive alpine classification systems as computational capabilities advance.</p>
+                            
+                            <h2>Skills Used</h2>
+                            <ul>
+                                <li>Machine Learning (Random Forest and Neural Networks)</li>
+                                <li>Remote Sensing and Image Analysis</li>
+                                <li>Land Use Land Cover Classification</li>
+                                <li>R Programming</li>
+                                <li>QGIS Spatial Analysis</li>
+                                <li>Digital Elevation Model Processing</li>
+                                <li>Model Validation and Evaluation (AUC)</li>
+                                <li>Environmental Data Integration</li>
+                                <li>Spatial Data Sampling</li>
+                                <li>Data Visualization and Interpretation</li>
+                            </ul>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="copyright">
+								<li>&copy; Joseph Tayabji. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
