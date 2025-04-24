@@ -3317,3 +3317,18 @@ input, select, textarea {
 			}
 
 		}
+
+/* Project Card Image Uniformity Fix */
+.tiles article > .image {
+    height: 350px; /* More square proportion - adjust as needed */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tiles article > .image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This maintains aspect ratio while covering the space */
+}

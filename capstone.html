@@ -1,0 +1,263 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>Cottonwood Heights Emergency Management and Property Valuations</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="shortcut icon" href="images/mapicon.ico">
+        <style>
+            .figure-container {
+                text-align: center;
+                margin: 20px 0;
+            }
+            .figure-caption {
+                text-align: center;
+                font-style: italic;
+                margin-top: 5px;
+                margin-bottom: 20px;
+            }
+            table {
+                margin: 20px auto;
+                width: 80%;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+            }
+            .code-snippet {
+                background-color: #f5f5f5;
+                padding: 15px;
+                border-radius: 5px;
+                overflow-x: auto;
+                margin: 20px 0;
+                font-family: monospace;
+                font-size: 0.9em;
+            }
+        </style>
+	</head>
+	<body class="is-preload">
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="inner">
+
+							<!-- Logo -->
+								<a href="https://joetayabji.github.io/" class="logo">
+									<span class="symbol"><img src="images/headshot.jpg" alt="" /></span><span class="title">Home</span>
+								</a>
+
+							<!-- Nav -->
+								<nav>
+									<ul>
+										<li><a href="#menu">Menu</a></li>
+									</ul>
+								</nav>
+
+						</div>
+					</header>
+
+				<!-- Menu -->
+					<nav id="menu">
+						<h2>Menu</h2>
+						<ul>
+							<li><a href="https://joetayabji.github.io/">Home</a></li>
+							<li><a href="capstone.html">GEOG 6161: Capstone in GIS</a></li>
+							<li><a href="alpine.html">GEOG 6160: Alpine ML Land Classification</a></li>
+							<li><a href="redbackedshrike.html">GEOG 6000: Kriging Bird Migration Prediction</a></li>
+							<li><a href="dirslope.html">GEOG 6180: Directional Slope</a></li>
+							<li><a href="bigdata.html">GEOG 6150: MTB Trail Database</a></li>
+							<li><a href="fieldmethods.html">GEOG 5170: Field Methods</a></li>
+						</ul>
+					</nav>
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+							<h1>GEOG 6161 Capstone Project: Emergency Management Assistance and Evolution of Property Valuations in Cottonwood Heights</h1>
+                            
+                            <h2>Project Overview</h2>
+                            <p>This capstone project addressed two distinct needs for the City of Cottonwood Heights: streamlining emergency management data processing and providing interactive visualization of property value changes over time. The project was completed in partnership with the City of Cottonwood Heights and involved the development of a Python script to automate emergency response workflows and the creation of an interactive dashboard to visualize property valuation trends.</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/flags.jpg" alt="Flag colors are used to indicate household statuses in an emergency" style="max-width: 400px;" />
+                                <p class="figure-caption">Figure 1: Flag colors are used to indicate household statuses in an emergency.</p>
+                            </div>
+                            
+                            <h2>Part 1: Emergency Management Assistance</h2>
+                            
+                            <h3>Background & Introduction</h3>
+                            <p>The City of Cottonwood Heights maintains an emergency preparedness strategy that relies on block, precinct, and district leaders reporting household statuses during emergencies. These statuses are represented by colored flags on residents' doors, indicating whether assistance is needed. The city's emergency preparedness team has partnered with the Cottonwood Heights Amateur Radio Club (CHARC) to streamline information transmission into Excel comma-separated value (CSV) files.</p>
+                            
+                            <p>Prior to this project, a largely manual process was used to transfer this information from CSV files into ArcGIS Pro. The first objective was to develop a user-friendly Python script that would allow the Emergency Operations Center (EOC) and CHARC members to upload CSV files and automatically publish the most recent emergency status information, eliminating manual steps in the workflow.</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/previous_workflow.png" alt="Previous emergency response GIS workflow" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 2: The previous emergency response GIS workflow at Cottonwood Heights.</p>
+                            </div>
+                            
+                            <h3>Methodology</h3>
+                            <p>The first task was to document the City's current emergency management procedure. The workflow started with block captains collecting household statuses through visual observation, then transmitting this information to the City's EOC via ham radio. At the EOC, the information was entered into CSV files organized by precinct, with each row representing an address with a unique ID. These CSV files were then manually joined to a feature class in ArcGIS Pro using this ID, and a static map was exported.</p>
+                            
+                            <p>After understanding the workflow, pseudocode was written to guide the development of the Python script. Visual Studio Code (VS Code) was used to write, test, and debug the code, with additional testing conducted inside ArcGIS Pro using the script as a notebook.</p>
+                            
+                            <p>The script includes the following key functions:</p>
+                            <ul>
+                                <li><strong>normalize_columns()</strong>: Standardizes CSV column names to account for variations in naming conventions.</li>
+                                <li><strong>combine_csvs()</strong>: Merges multiple CSV reports into a single Pandas DataFrame while tracking the source file for each record.</li>
+                                <li><strong>update_feature_class_from_csv()</strong>: Updates the GIS feature class with the latest status information using AddressID as the primary key.</li>
+                                <li><strong>create_summary_table_from_feature_class()</strong>: Creates a pivoted summary table showing status counts by district with standardized categories.</li>
+                                <li><strong>export_layout_to_jpeg()</strong>: Exports the ArcGIS Pro layout as a timestamped JPEG file for record-keeping.</li>
+                            </ul>
+                            
+                            <div class="code-snippet">
+                                <p># Normalize the columns<br>
+                                # This accounts for situations where the column is named AddressID, Address ID, or Address_ID<br>
+                                # Also, this drops unnamed and extra columns<br>
+                                def normalize_columns(df):<br>
+                                    # Map normalized column names to original ones<br>
+                                    normalized_map = {}<br>
+                                    for col in df.columns:<br>
+                                        normalized_key = col.strip().lower().replace(" ", "").replace("_", "")<br>
+                                        normalized_map[normalized_key] = normalized_map.get(normalized_key, []) + [col]<br>
+                                <br>
+                                    if "addressid" in normalized_map:<br>
+                                        aliases = normalized_map["addressid"]<br>
+                                        # Rename the first match to 'AddressID'<br>
+                                        df.rename(columns={aliases[0]: "AddressID"}, inplace=True)<br>
+                                        # Drop any duplicate 'AddressID' variants<br>
+                                        for alias in aliases[1:]:<br>
+                                            if alias in df.columns:<br>
+                                                df.drop(columns=alias, inplace=True)<br>
+                                <br>
+                                    # Drop unnamed or all-null columns<br>
+                                    df = df.loc[:, ~df.columns.str.contains("^Unnamed", case=False)]<br>
+                                    df = df.dropna(axis=1, how="all")<br>
+                                <br>
+                                    return df</p>
+                            </div>
+                            
+                            <div class="figure-container">
+                                <img src="images/pseudocode.png" alt="Python script workflow" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 3: Visualized pseudocode showing the process of the Python script. Each box represents a coded function, with an image relating to manual work that the script replaces.</p>
+                            </div>
+                            
+                            <h3>Results</h3>
+                            <p>The key result of this part of the project was a fully functional Python script that automates several steps from the previous emergency management GIS workflow. The script successfully processes multiple CSV files while normalizing data formats and combining them into a single DataFrame. The ArcGIS Pro feature class is updated, summary statistics are conducted, and a layout is automatically exported with a timestamp, allowing for temporal analysis.</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/new_workflow.png" alt="New emergency management workflow" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 4: The emergency management GIS workflow after implementation of the Python script.</p>
+                            </div>
+                            
+                            <div class="figure-container">
+                                <img src="images/ER_layout.jpg" alt="City-wide layout using data from a shakeout exercise" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 5: A city-wide layout using test data from the 2025 Shakeout exercise.</p>
+                            </div>
+                            
+                            <div class="figure-container">
+                                <img src="images/ER_layout_closer.jpg" alt="A closer look at the status layout" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 6: A city-wide layout using test data from the 2025 Shakeout exercise.</p>
+                            </div>
+
+
+                            <h3>Discussion</h3>
+                            <p>The Python script significantly improved the efficiency of emergency response by eliminating manual data processing steps. What previously required multiple manual operations now functions as a streamlined process with minimal user intervention. A key feature of the script is its data validation and normalization capabilities, handling variations in data formatting that frequently occur when multiple users are submitting reports.</p>
+                            
+                            <p>For example, the script normalizes status codes ('G', 'g', 'green') to a standardized format, making the system more resilient and accommodating of real-world conditions. This flexibility is essential in emergency situations where data consistency cannot always be guaranteed.</p>
+                            
+                            <h2>Part 2: Evolution of Property Valuations</h2>
+                            
+                            <h3>Background & Introduction</h3>
+                            <p>The second objective focused on property valuations within Cottonwood Heights, with particular emphasis on the area surrounding the former Hillside Plaza, where "The Heights," the City's upcoming town center, will be constructed. City planners required an interactive visualization tool to understand how property values have changed over time to support their decision-making processes.</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/theheights.jpg" alt="Conceptual rendering of The Heights" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 7: A conceptual rendering of The Heights (source: Cottonwood Heights).</p>
+                            </div>
+                            
+                            <h3>Methodology</h3>
+                            <p>Data were received in the form of Salt Lake County parcel feature classes, one for each tax year. The Salt Lake County Assessor's Office provided information covering over two decades, but the data were only complete for 2017 onwards, so the timeframe was limited accordingly. A field was added to each feature class to calculate changes in total adjusted value from the year prior, as well as from 2017. The data were then symbolized in ArcGIS Pro according to percent value changes and exported to ArcGIS Online (AGOL).</p>
+                            
+                            <p>Using AGOL's Dashboard product, an interactive tool was created for visualization. Individual dashboards were created for each year of data, then stacked on top of each other as embedded content in a "master dashboard."</p>
+                            
+                            <div class="figure-container">
+                                <img src="images/property_dashboard.png" alt="Property valuation dashboard" style="max-width: 700px;" />
+                                <p class="figure-caption">Figure 8: The property valuation dashboard created in ArcGIS Online.</p>
+                            </div>
+                            
+                            <h3>Results & Discussion</h3>
+                            <p>The property valuation component resulted in an interactive AGOL dashboard that visualizes property value changes since 2017. Data are symbolized by the percentage change in adjusted value since 2017 and can be filtered based on lot use, allowing residential properties to be examined separately from commercial.</p>
+                            
+                            <p>The dashboard serves as a valuable tool for city planners, enabling them to identify areas of significant value change and understand the potential impact of the new town center development. The interactive nature of the visualization allows for deeper exploration of the data than would be possible with static reports.</p>
+                            
+                            <p>One limitation is the availability of historical data, which only extends back to the 2017/2018 tax year with adjusted values. Future iterations could incorporate older data sets if they become available.</p>
+                            
+                            <h2>Conclusion</h2>
+                            <p>This project successfully addressed two distinct needs for the City of Cottonwood Heights. The new Python script allows for the automation of steps that were previously time-consuming, enhancing decision-making capabilities during critical situations. The property valuation dashboard provides city planners with insights into how property values have evolved, helping to inform planning decisions related to the new town center development.</p>
+                            
+                            <p>Through these two components, the project demonstrates the value of GIS in municipal governments, showing how it can drive more powerful decision-making in emergency management and city planning contexts.</p>
+                            
+                            <h2>Future Opportunities</h2>
+                            <p>For the emergency management component:</p>
+                            <ul>
+                                <li>Refining the Python script documentation</li>
+                                <li>Conducting additional testing in the City's standard network environment</li>
+                                <li>Testing the script on the City's EOC server</li>
+                                <li>Customizing the layout to include views for each district</li>
+                            </ul>
+                            
+                            <p>For the property valuation component:</p>
+                            <ul>
+                                <li>Retrieving more historical data (prior to 2017/2018)</li>
+                                <li>Exploring alternative visualization techniques to enhance the dashboard's utility</li>
+                            </ul>
+                            
+                            <h2>Skills Used</h2>
+                            <ul>
+                                <li>Python Programming (ArcPy, Pandas)</li>
+                                <li>GIS Analysis and Visualization</li>
+                                <li>Data ETL (Extract, Transform, Load) Processes</li>
+                                <li>ArcGIS Pro and ArcGIS Online</li>
+                                <li>Dashboard Design and Development</li>
+                                <li>Spatial Data Processing</li>
+                                <li>Data Validation and Normalization</li>
+                                <li>Process Automation</li>
+                                <li>Requirements Analysis</li>
+                                <li>Property Valuation Analysis</li>
+                                <li>Emergency Management Workflows</li>
+                            </ul>
+                            
+                            <h2>Acknowledgements</h2>
+                            <p>This project was completed in partnership with the City of Cottonwood Heights. Special thanks to Melissa Blue for providing guidance, data, and support. Additionally, Dr. Phoebe McNeally and the University of Utah are owed appreciation for their instruction and resources.</p>
+						</div>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="copyright">
+								<li>&copy; Joseph Tayabji. All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
