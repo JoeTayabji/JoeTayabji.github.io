@@ -84,7 +84,7 @@
                                 Slope calculation is a fundamental operation in geospatial analysis, particularly for planning routes, trails, roads, and other infrastructure in mountainous terrain. Traditional slope calculations often focus on the maximum slope at a point, which is useful for many applications but doesn't account for directionality. For applications like trail design, understanding how steep a path will be when following a specific direction is crucial.
                             </p>
                             <p>
-                                This project implements a directional slope tool that calculates the slope along a specific path, considering both the terrain and the direction of travel. The result is a much more useful metric for path design than traditional slope calculations, as it accounts for the actual steepness that would be experienced when traversing the path.
+                                This project implements a directional slope tool (<i>Figure 1</i>) that calculates the slope along a specific path, considering both the terrain and the direction of travel. The result is a much more useful metric for path design than traditional slope calculations, as it accounts for the actual steepness that would be experienced when traversing the path.
                             </p>
                             
                             <div class="figure-container">
@@ -183,10 +183,6 @@ def get_horn(px, py):
                                 The directional slope tool produces a new line shapefile with segments that contain both bearing and directional slope attributes. These results can be visualized in GIS software to identify steep sections, evaluate trail difficulty, and plan optimal routes.
                             </p>
                             
-                            <div class="figure-container">
-                                <img src="images/dirslope.jpg" alt="Figure 2: Example output showing directional slope values along a path" style="max-width: 600px;" />
-                                <p class="figure-caption">Figure 2: Example output showing directional slope values along a path</p>
-                            </div>
                             
                             <p>
                                 When applied to real-world data, the directional slope tool provides valuable insights that traditional slope analysis cannot. For example, in mountainous terrain, a path that follows contour lines will show minimal directional slope despite being on steep hillsides. Conversely, a path that goes directly up or down a slope will show the maximum directional slope.
@@ -209,21 +205,6 @@ def get_horn(px, py):
                             </ul>
                             
                             <h2>Future Development</h2>
-                            <p>
-                                This project, originally developed as a standalone Python script, is now being developed into separate QGIS and ArcGIS plugins in collaboration with Dr. Dara Seidl. The QGIS plugin will provide open-source access to the tool, while the ArcGIS plugin will integrate with existing ESRI workflows.
-                            </p>
-                            
-                            <p>
-                                Planned enhancements include:
-                            </p>
-                            
-                            <ul>
-                                <li>Interactive visualization of results</li>
-                                <li>Options for different slope calculation methods</li>
-                                <li>Integration with trail standards and guidelines</li>
-                                <li>Batch processing capabilities</li>
-                                <li>Report generation for trail assessment</li>
-                            </ul>
                             
                             <p>
                                 <a href="dir_slope_foss_horn.py" target="_blank">The full standalone script can be found here.</a>
@@ -233,14 +214,9 @@ def get_horn(px, py):
                             <ul>
                                 <li>Python Programming</li>
                                 <li>Geospatial Libraries (GDAL/OGR, Shapely)</li>
-                                <li>Raster Analysis</li>
-                                <li>Vector Processing</li>
                                 <li>Digital Elevation Model (DEM) Handling</li>
                                 <li>Terrain Analysis Algorithms</li>
                                 <li>Geospatial Data Formats</li>
-                                <li>Tool Development</li>
-                                <li>Scientific Computing (NumPy)</li>
-                                <li>Technical Documentation</li>
                             </ul>
 						</div>
 					</div>

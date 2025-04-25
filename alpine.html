@@ -76,26 +76,26 @@
 							<h1>GEOG 6160 Spatial Modeling and Geocomputation: Using Machine Learning for Alpine Land Classification in Mountainous Terrain</h1>
                             
                             <h2>Background & Introduction</h2>
-                            <p>Alpine terrain is a crucial research area for scientists across multiple disciplines, including botanists at the Betty Ford Alpine Gardens in Vail, Colorado. While mountains are intuitively recognizable to humans, providing definitive scientific classifications of alpine terrain remains challenging. A rough definition of alpine areas can be described as mountain regions where a combination of temperature, growing season, elevation, and latitude create conditions unsuitable for tree growth (Paulsen & Körner, 2014).</p>
+                            <p>Alpine terrain is a crucial research area for scientists across multiple disciplines, including botanists at the Betty Ford Alpine Gardens in Vail, Colorado. While mountains are intuitively recognizable to humans, providing definitive scientific classifications of alpine terrain remains challenging. A rough definition of alpine areas can be described as mountain regions where a combination of temperature, growing season, elevation, and latitude create conditions unsuitable for tree growth.</p>
                             
                             <div class="figure-container">
                                 <img src="images/columbine_todd_pierce.jpg" alt="Figure 1: Columbine (Aquilegia)" style="max-width: 800px;" />
                                 <p class="figure-caption">Figure 1: Columbine (Aquilegia). Source: Todd Pierce, Betty Ford Alpine Gardens</p>
                             </div>
                             
-                            <p>The Betty Ford Alpine Gardens, dedicated to conservation and education about alpine flora, employs botanists and biologists who conduct field research searching for different alpine plant species. Their work is challenging due to short alpine summers (when snow has melted) and vast alpine areas to explore. This project aims to apply modern machine learning methods to help identify alpine regions more precisely, supporting researchers in focusing their field efforts more effectively.</p>
+                            <p>The Betty Ford Alpine Gardens, dedicated to conservation and education about alpine flora, employs botanists and biologists who conduct field research searching for different alpine plant species (<i>Figure 1</i>). Their work is challenging due to short alpine summers (when snow has melted) and vast alpine areas to explore. This project aims to apply modern machine learning methods to help identify alpine regions more precisely, supporting researchers in focusing their field efforts more effectively.</p>
                             
-                            <p>The Global Mountain Biodiversity Assessment (GMBA) has adopted the concept of "ruggedness" to define mountains, focusing on local elevation changes rather than absolute elevation. Additionally, Testolin et al. (2020) developed a comprehensive global map of alpine areas using 19 climatic variables, though some regions like the Tarryall Mountains in Colorado remain unclassified in their approach.</p>
+                            <p>The Global Mountain Biodiversity Assessment (GMBA) has adopted the concept of "ruggedness" to define mountains, focusing on local elevation changes rather than absolute elevation. Additionally, Testolin et al. (2020) developed a comprehensive global map of alpine areas using 19 climatic variables, though some regions like the Tarryall Mountains (<i>Figure 2)</i> in Colorado remain unclassified in their approach.</p>
                             
                             <div class="figure-container">
                                 <img src="images/tarryall_mountains.jpg" alt="Figure 2: The location of the Tarryall Mountains" style="max-width: 600px;" />
                                 <p class="figure-caption">Figure 2: The location of the Tarryall Mountains is denoted by the red box. Source: OpenStreetMap</p>
                             </div>
                             
-                            <p>Machine learning has proven effective for land use land cover (LULC) classification, particularly when combining methods like random forest, support vector machine, and artificial neural networks with Landsat imagery (Talukdar et al., 2020). This study explores whether these techniques can be applied successfully to the specific challenge of alpine terrain classification.</p>
+                            <p>Machine learning has proven effective for land use land cover (LULC) classification, particularly when combining methods like random forest, support vector machine, and artificial neural networks with satellite imagery. This study explores whether these techniques can be applied successfully to the specific challenge of alpine terrain classification.</p>
                             
                             <h2>Methodology</h2>
-                            <p>This study builds upon work by Emily Griffoul (Conservation Scientist at Betty Ford Alpine Gardens) and Dara Seidl (Associate Professor of GIS at Colorado Mountain College). While Griffoul attempted to combine in situ observations with the GMBA mountain inventory using ESRI ArcGIS Pro, the results were not sufficiently accurate and were time-intensive. Seidl achieved better results using remote sensing, digital elevation models (DEMs), and Google Earth Engine (GEE), but encountered limitations in GEE's methodological options.</p>
+                            <p>This study builds upon work by Emily Griffoul (Conservation Scientist at Betty Ford Alpine Gardens) and Dara Seidl (Associate Professor of GIS at Colorado Mountain College). While Griffoul attempted to combine <i>in situ</i> observations with the GMBA mountain inventory using ESRI ArcGIS Pro, the results were not sufficiently accurate and were time-intensive. Seidl achieved better results using remote sensing, digital elevation models (DEMs), and Google Earth Engine (GEE), but encountered limitations in GEE's methodological options.</p>
                             
                             <div class="table-wrapper">
                                 <table>
@@ -139,7 +139,7 @@
                                 <p class="figure-caption">Figure 3: Landsat 9 OLI-2 Bands. Source: USGS</p>
                             </div>
                             
-                            <p>This study employed similar techniques to Seidl's but utilized random forests and neural networks in R. Landsat 9 OLI-2 imagery was collected for summer months (mid-July to mid-September, 2018 to 2024) to minimize snow effects on reflectance. Cloud coverage was limited to 4% in the data sourced from the USGS, which also provided the DEMs.</p>
+                            <p>This study employed similar techniques to Seidl's but utilized random forests and neural networks in R. Landsat 9 OLI-2 imagery (<i>Figure 3</i>) was collected for summer months (mid-July to mid-September, 2018 to 2024) to minimize snow effects on reflectance. Cloud coverage was limited to 4% in the data sourced from the USGS, which also provided the DEMs.</p>
                             
                             <p>Three diverse study areas were selected:</p>
                             <ol>
@@ -153,7 +153,7 @@
                                 <p class="figure-caption">Figure 4: A QGIS screenshot showing a small subset of the polygons used for training data samples. Here, magenta polygons occur in alpine environments, while the cyan ones do not.</p>
                             </div>
                             
-                            <p>Using QGIS, polygons were manually created in each area to represent alpine and non-alpine land cover, resulting in six total shapefiles. These were referenced against Google Maps Satellite imagery. From these polygons, 999 random samples were taken from each shapefile (5,994 points total). Three different raster stacks were created, one for each study area, with eight bands: seven from Landsat 9 OLI-2 and one DEM. All data was scaled to a range of 0-1 based on minimum and maximum values, and N/A values were removed, leaving 5,889 points.</p>
+                            <p>Using QGIS, polygons were manually created in each area to represent alpine and non-alpine land cover (<i>Figure 4</i>), resulting in six total shapefiles. These were referenced against Google Maps Satellite imagery. From these polygons, 999 random samples were taken from each shapefile (5,994 points total). Three different raster stacks were created, one for each study area, with eight bands: seven from Landsat 9 OLI-2 and one DEM. All data was scaled to a range of 0-1 based on minimum and maximum values, and N/A values were removed, leaving 5,889 points.</p>
                             
                             <div class="figure-container">
                                 <img src="images/rf_with_ele.jpeg" alt="Figure 5: Variable importance plot" style="max-width: 700px;" />
@@ -171,7 +171,7 @@
                             <p>The neural network models used the following parameters: size = 25, decay = 1e-5, maxit = 500. All models were resampled with an 80%/20% holdout strategy, and attempts were made to tune hyperparameters, though none improved the AUC scores.</p>
                             
                             <h2>Results</h2>
-                            <p>The random forest model using only Landsat 9 OLI-2 bands achieved an AUC score of 0.97. When elevation was added, the AUC improved to 0.998, with elevation showing considerable variable importance (Figure 5).</p>
+                            <p>The random forest model using only Landsat 9 OLI-2 bands achieved an AUC score of 0.97. When elevation was added, the AUC improved to 0.998, with elevation showing considerable variable importance (<i>Figure 5</i>).</p>
                             
                             <p>The neural network models yielded similar results. Using only remote sensing imagery resulted in an AUC of 0.979, while adding latitude and elevation increased the AUC to 0.999.</p>
                             
@@ -202,10 +202,10 @@
                                 </div>
                             </div>
                             
-                            <p>When applied to prediction scenarios, the neural network model using only Landsat 9 OLI-2 bands showed errors of commission. While it captured treeline details effectively, it incorrectly classified pixels below treeline and water bodies as alpine. The model incorporating elevation and latitude created clearer boundaries between alpine and non-alpine regions but had mixed results: it overstated alpine regions in Colorado while understating them in Utah. Neither model correctly classified the Tarryall Mountains as alpine.</p>
+                            <p>When applied to prediction scenarios (<i>Figures 6, 7, 8</i>), the neural network model using only Landsat 9 OLI-2 bands showed errors of commission. While it captured treeline details effectively, it incorrectly classified pixels below treeline and water bodies as alpine. The model incorporating elevation and latitude created clearer boundaries between alpine and non-alpine regions but had mixed results: it overstated alpine regions in Colorado while understating them in Utah. Neither model correctly classified the Tarryall Mountains as alpine.</p>
                             
                             <h2>Discussion & Conclusion</h2>
-                            <p>Despite high AUC scores, the models fell short of producing satisfactory generalized predictions, particularly in Utah (Figure 8). Overfitting appears to be the primary issue, as evidenced by excellent scores but poor performance in new landscapes. This suggests two potential approaches for improvement: using less training data or collecting more diverse training samples from additional landscapes.</p>
+                            <p>Despite high AUC scores, the models fell short of producing satisfactory generalized predictions, particularly in Utah (<i>Figure 8</i>). Overfitting appears to be the primary issue, as evidenced by excellent scores but poor performance in new landscapes. This suggests two potential approaches for improvement: using less training data or collecting more diverse training samples from additional landscapes.</p>
                             
                             <p>The proper treatment of elevation and latitude remains a challenge, as they are strongly associated and can lead to spatial autocorrelation. However, both variables are clearly important in defining alpine regions. Additionally, this work demonstrated the need for significant computational resources when processing and analyzing this type of data, especially when working with neural networks.</p>
                             
@@ -219,10 +219,6 @@
                                 <li>R Programming</li>
                                 <li>QGIS Spatial Analysis</li>
                                 <li>Digital Elevation Model Processing</li>
-                                <li>Model Validation and Evaluation (AUC)</li>
-                                <li>Environmental Data Integration</li>
-                                <li>Spatial Data Sampling</li>
-                                <li>Data Visualization and Interpretation</li>
                             </ul>
 						</div>
 					</div>

@@ -95,7 +95,7 @@
                             <h2>Part 1: Emergency Management Assistance</h2>
                             
                             <h3>Background & Introduction</h3>
-                            <p>The City of Cottonwood Heights maintains an emergency preparedness strategy that relies on block, precinct, and district leaders reporting household statuses during emergencies. These statuses are represented by colored flags on residents' doors, indicating whether assistance is needed. The city's emergency preparedness team has partnered with the Cottonwood Heights Amateur Radio Club (CHARC) to streamline information transmission into Excel comma-separated value (CSV) files.</p>
+                            <p>The City of Cottonwood Heights maintains an emergency preparedness strategy that relies on block, precinct, and district leaders reporting household statuses during emergencies. These statuses are represented by colored flags on residents' doors (<i>Figure 1</i>), indicating whether assistance is needed. The city's emergency preparedness team has partnered with the Cottonwood Heights Amateur Radio Club (CHARC) to streamline information transmission into Excel comma-separated value (CSV) files.</p>
                             
                             <p>Prior to this project, a largely manual process was used to transfer this information from CSV files into ArcGIS Pro. The first objective was to develop a user-friendly Python script that would allow the Emergency Operations Center (EOC) and CHARC members to upload CSV files and automatically publish the most recent emergency status information, eliminating manual steps in the workflow.</p>
                             
@@ -105,9 +105,9 @@
                             </div>
                             
                             <h3>Methodology</h3>
-                            <p>The first task was to document the City's current emergency management procedure. The workflow started with block captains collecting household statuses through visual observation, then transmitting this information to the City's EOC via ham radio. At the EOC, the information was entered into CSV files organized by precinct, with each row representing an address with a unique ID. These CSV files were then manually joined to a feature class in ArcGIS Pro using this ID, and a static map was exported.</p>
+                            <p>The first task was to document the City's current emergency management procedure. The workflow started with block captains collecting household statuses through visual observation, then transmitting this information to the City's EOC via ham radio. At the EOC, the information was entered into CSV files organized by precinct, with each row representing an address with a unique ID. These CSV files were then manually joined to a feature class in ArcGIS Pro using this ID, and a static map was exported (<i>Figure 2</i>).</p>
                             
-                            <p>After understanding the workflow, pseudocode was written to guide the development of the Python script. Visual Studio Code (VS Code) was used to write, test, and debug the code, with additional testing conducted inside ArcGIS Pro using the script as a notebook.</p>
+                            <p>After understanding the workflow, pseudocode (visualized in <i>Figure 3</i>) was written to guide the development of the Python script. Visual Studio Code (VS Code) was used to write, test, and debug the code, with additional testing conducted inside ArcGIS Pro using the script as a notebook.</p>
                             
                             <p>The script includes the following key functions:</p>
                             <ul>
@@ -118,32 +118,6 @@
                                 <li><strong>export_layout_to_jpeg()</strong>: Exports the ArcGIS Pro layout as a timestamped JPEG file for record-keeping.</li>
                             </ul>
                             
-                            <div class="code-snippet">
-                                <p># Normalize the columns<br>
-                                # This accounts for situations where the column is named AddressID, Address ID, or Address_ID<br>
-                                # Also, this drops unnamed and extra columns<br>
-                                def normalize_columns(df):<br>
-                                    # Map normalized column names to original ones<br>
-                                    normalized_map = {}<br>
-                                    for col in df.columns:<br>
-                                        normalized_key = col.strip().lower().replace(" ", "").replace("_", "")<br>
-                                        normalized_map[normalized_key] = normalized_map.get(normalized_key, []) + [col]<br>
-                                <br>
-                                    if "addressid" in normalized_map:<br>
-                                        aliases = normalized_map["addressid"]<br>
-                                        # Rename the first match to 'AddressID'<br>
-                                        df.rename(columns={aliases[0]: "AddressID"}, inplace=True)<br>
-                                        # Drop any duplicate 'AddressID' variants<br>
-                                        for alias in aliases[1:]:<br>
-                                            if alias in df.columns:<br>
-                                                df.drop(columns=alias, inplace=True)<br>
-                                <br>
-                                    # Drop unnamed or all-null columns<br>
-                                    df = df.loc[:, ~df.columns.str.contains("^Unnamed", case=False)]<br>
-                                    df = df.dropna(axis=1, how="all")<br>
-                                <br>
-                                    return df</p>
-                            </div>
                             
                             <div class="figure-container">
                                 <img src="images/pseudocode.png" alt="Python script workflow" style="max-width: 700px;" />
@@ -151,7 +125,7 @@
                             </div>
                             
                             <h3>Results</h3>
-                            <p>The key result of this part of the project was a fully functional Python script that automates several steps from the previous emergency management GIS workflow. The script successfully processes multiple CSV files while normalizing data formats and combining them into a single DataFrame. The ArcGIS Pro feature class is updated, summary statistics are conducted, and a layout is automatically exported with a timestamp, allowing for temporal analysis.</p>
+                            <p>The key result of this part of the project was a fully functional Python script that automates several steps from the previous emergency management GIS workflow (<i>Figure 4</i>). The script successfully processes multiple CSV files while normalizing data formats and combining them into a single DataFrame. The ArcGIS Pro feature class is updated, summary statistics are conducted, and a layout is automatically exported (<i>Figures 5, 6</i>) with a timestamp, allowing for temporal analysis.</p>
                             
                             <div class="figure-container">
                                 <img src="images/new_workflow.png" alt="New emergency management workflow" style="max-width: 700px;" />
@@ -165,7 +139,7 @@
                             
                             <div class="figure-container">
                                 <img src="images/ER_layout_closer.jpg" alt="A closer look at the status layout" style="max-width: 700px;" />
-                                <p class="figure-caption">Figure 6: A city-wide layout using test data from the 2025 Shakeout exercise.</p>
+                                <p class="figure-caption">Figure 6: A zoomed in layout using test data from the 2025 Shakeout exercise.</p>
                             </div>
 
 
@@ -177,7 +151,7 @@
                             <h2>Part 2: Evolution of Property Valuations</h2>
                             
                             <h3>Background & Introduction</h3>
-                            <p>The second objective focused on property valuations within Cottonwood Heights, with particular emphasis on the area surrounding the former Hillside Plaza, where "The Heights," the City's upcoming town center, will be constructed. City planners required an interactive visualization tool to understand how property values have changed over time to support their decision-making processes.</p>
+                            <p>The second objective focused on property valuations within Cottonwood Heights, with particular emphasis on the area surrounding the former Hillside Plaza, where "The Heights," the City's upcoming town center, will be constructed (<i>Figure 7</i>). City planners required an interactive visualization tool to understand how property values have changed over time to support their decision-making processes.</p>
                             
                             <div class="figure-container">
                                 <img src="images/theheights.jpg" alt="Conceptual rendering of The Heights" style="max-width: 700px;" />
@@ -187,7 +161,7 @@
                             <h3>Methodology</h3>
                             <p>Data were received in the form of Salt Lake County parcel feature classes, one for each tax year. The Salt Lake County Assessor's Office provided information covering over two decades, but the data were only complete for 2017 onwards, so the timeframe was limited accordingly. A field was added to each feature class to calculate changes in total adjusted value from the year prior, as well as from 2017. The data were then symbolized in ArcGIS Pro according to percent value changes and exported to ArcGIS Online (AGOL).</p>
                             
-                            <p>Using AGOL's Dashboard product, an interactive tool was created for visualization. Individual dashboards were created for each year of data, then stacked on top of each other as embedded content in a "master dashboard."</p>
+                            <p>Using AGOL's Dashboard product (<i>Figure 8</i>), an interactive tool was created for visualization. Individual dashboards were created for each year of data, then stacked on top of each other as embedded content in a "master dashboard."</p>
                             
                             <div class="figure-container">
                                 <img src="images/property_dashboard.png" alt="Property valuation dashboard" style="max-width: 700px;" />
@@ -206,32 +180,15 @@
                             
                             <p>Through these two components, the project demonstrates the value of GIS in municipal governments, showing how it can drive more powerful decision-making in emergency management and city planning contexts.</p>
                             
-                            <h2>Future Opportunities</h2>
-                            <p>For the emergency management component:</p>
-                            <ul>
-                                <li>Refining the Python script documentation</li>
-                                <li>Conducting additional testing in the City's standard network environment</li>
-                                <li>Testing the script on the City's EOC server</li>
-                                <li>Customizing the layout to include views for each district</li>
-                            </ul>
-                            
-                            <p>For the property valuation component:</p>
-                            <ul>
-                                <li>Retrieving more historical data (prior to 2017/2018)</li>
-                                <li>Exploring alternative visualization techniques to enhance the dashboard's utility</li>
-                            </ul>
                             
                             <h2>Skills Used</h2>
                             <ul>
                                 <li>Python Programming (ArcPy, Pandas)</li>
                                 <li>GIS Analysis and Visualization</li>
-                                <li>Data ETL (Extract, Transform, Load) Processes</li>
                                 <li>ArcGIS Pro and ArcGIS Online</li>
                                 <li>Dashboard Design and Development</li>
                                 <li>Spatial Data Processing</li>
-                                <li>Data Validation and Normalization</li>
                                 <li>Process Automation</li>
-                                <li>Requirements Analysis</li>
                                 <li>Property Valuation Analysis</li>
                                 <li>Emergency Management Workflows</li>
                             </ul>

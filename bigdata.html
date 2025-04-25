@@ -76,22 +76,22 @@
 				<!-- Main -->
 					<div id="main">
 						<div class="inner">
-							<h1>GEOG 6150: Utah Mountain Biking GIS Database</h1>
+							<h1>GEOG 6150 Geospatial Big Data<br>Utah Mountain Biking GIS Database</h1>
                             
                             <h2>Background & Introduction</h2>
-                            <p>Maps and spatial data serve as essential tools for both facilitating access and supporting conservation efforts in outdoor recreation areas (Senda-Cook, 2013). The increasing adoption of geospatial technologies has transformed traditional cartography into interactive digital experiences, with platforms like Trailforks and MTB Project utilizing geolocation features to extend trail maps' functionality. These applications provide access to over 100,000 miles of trails and enable real-time location services via GNSS.</p>
+                            <p>Maps and spatial data serve as essential tools for both facilitating access and supporting conservation efforts in outdoor recreation areas. The increasing adoption of geospatial technologies has transformed traditional cartography into interactive digital experiences, with platforms like Trailforks and MTB Project utilizing geolocation features to extend trail maps' functionality. These applications provide access to over 100,000 miles of trails and enable real-time location services via GNSS.</p>
                             
                             <div class="figure-container">
                                 <img src="images/utah_trails.png" alt="Figure 1: Mountain biking trails in Utah" style="max-width: 700px;" />
                                 <p class="figure-caption">Figure 1: Mountain biking trails in Utah</p>
                             </div>
                             
-                            <p>Utah is widely recognized for its mountain biking opportunities, with areas like Moab attracting visitors from around the world. The state's diverse terrain and extensive trail networks make it an ideal location for a comprehensive geospatial database focused on mountain biking infrastructure. Land management agencies, including the United States Forest Service (USFS) and Bureau of Land Management (BLM), maintain extensive recreation databases and conduct regular visitor forecasting (Rosenberg & Loomis, 2000). In Utah, these agencies have a particularly strong management presence due to high visitation rates (Zhang & Smith, 2023).</p>
+                            <p>Utah is widely recognized for its mountain biking opportunities (<i>Figure 1</i>), with areas like Moab attracting visitors from around the world. The state's diverse terrain and extensive trail networks make it an ideal location for a comprehensive geospatial database focused on mountain biking infrastructure. Land management agencies, including the United States Forest Service (USFS) and Bureau of Land Management (BLM), maintain extensive recreation databases and conduct regular visitor forecasting. In Utah, these agencies have a particularly strong management presence due to high visitation rates.</p>
                             
                             <p>While existing applications excel at trail discovery and real-time location services, there remains significant potential for enhanced functionality, particularly in comprehensive trip planning. Critical information such as bike service facilities, campground locations, shower facilities, and emergency medical services are often absent or difficult to integrate. The Utah Mountain Biking GIS Database project addresses this gap by creating a comprehensive spatial database that integrates multiple data sources to support advanced trip planning and resource management for mountain biking in Utah.</p>
                             
                             <h2>Methodology</h2>
-                            <p>The database design process began with the development of an Entity-Relationship (ER) diagram to establish the foundational relationships between key spatial and attribute data (Figure 2). This conceptual model guided the identification and acquisition of relevant geospatial datasets.</p>
+                            <p>The database design process began with the development of an Entity-Relationship (ER) diagram to establish the foundational relationships between key spatial and attribute data (<i>Figure 2</i>). This conceptual model guided the identification and acquisition of relevant geospatial datasets.</p>
                             
                             <div class="figure-container">
                                 <img src="images/er_diagram.png" alt="Figure 2: ER Diagram" style="max-width: 700px;" />
@@ -100,7 +100,7 @@
                             
                             <p>Primary geospatial datasets were acquired from the Utah Geospatial Resource Center (UGRC), including shapefiles for trails, ski areas, trailheads, emergency medical services, landmarks, and features. Administrative boundary data (state, county, and city) was sourced from the USDA:NRCS Geospatial Data Gateway. Supplementary information for bike shops and shower facilities was compiled using Google Maps and stored in CSV format with latitude and longitude coordinates.</p>
                             
-                            <p>Data processing and integration were performed using QGIS and PostgreSQL/PostGIS. A connection was established between QGIS and the PostgreSQL database via pgAdmin. All spatial data was transformed to a consistent coordinate reference system (NAD83 UTM 12N) and indexed for optimized query performance. The following processing steps were performed:</p>
+                            <p>Data processing and integration were performed using QGIS and PostgreSQL/PostGIS. A connection was established between QGIS and the PostgreSQL database via pgAdmin (<i>Figure 3</i>). All spatial data was transformed to a consistent coordinate reference system (NAD83 UTM 12N) and indexed for optimized query performance. The following processing steps were performed:</p>
                             
                             <ol>
                                 <li>Imported shapefiles to PostgreSQL/PostGIS schema</li>
@@ -144,7 +144,7 @@ SET closest_ems = (
                             <h2>Results</h2>
                             <p>The integration of multiple geospatial datasets resulted in a comprehensive database that supports advanced spatial queries relevant to mountain bike trip planning and resource management. Analysis of trail distribution revealed the counties with the highest density of mountain biking trails, providing valuable information for both visitors and land managers.</p>
                             
-                            <p>From a safety perspective, the database identified trailheads that were furthest from emergency medical service providers, with Western Rim, East Forks Black Fork, and Piute Pass trailheads being the most remote in terms of emergency service access (Figure 4). This information is particularly valuable for trip safety planning and could inform future emergency service planning.</p>
+                            <p>From a safety perspective, the database identified trailheads that were furthest from emergency medical service providers, with Western Rim, East Forks Black Fork, and Piute Pass trailheads being the most remote in terms of emergency service access (<i>Figure 4</i>). This information is particularly valuable for trip safety planning and could inform future emergency service planning.</p>
                             
                             <div class="figure-container">
                                 <img src="images/remote_trailheads.png" alt="Figure 4: Remote trailheads" style="max-width: 700px;" />
@@ -202,13 +202,7 @@ LIMIT 3;</code></pre>
                                 <li>SQL Query Development</li>
                                 <li>Entity-Relationship Modeling</li>
                                 <li>QGIS and Database Integration</li>
-                                <li>Spatial Analysis and Querying</li>
-                                <li>Proximity Analysis</li>
-                                <li>Coordinate Reference System Transformations</li>
-                                <li>Geospatial Data Integration</li>
                                 <li>Spatial Index Implementation</li>
-                                <li>Multi-source Data Fusion</li>
-                                <li>Spatial Visualization</li>
                             </ul>
 						</div>
 					</div>
